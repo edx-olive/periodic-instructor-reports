@@ -33,6 +33,8 @@ def plugin_settings(settings):
     """
     Specifies django environment settings
     """
+    if "django_celery_beat" not in settings.INSTALLED_APPS:
+        settings.INSTALLED_APPS += ["django_celery_beat", ]
 
     # Set the celery beat scheduler to database scheduler if not defined.
     # In case the scheduler is set to something else than `DatabaseScheduler`,
