@@ -29,3 +29,4 @@ class PeriodicReportScheduleAdmin(admin.ModelAdmin):
     list_display = ["task", "interval", "course_ids", "arguments", "keyword_arguments"]
     list_filter = ["task__name"]
     search_fields = ["task__name", "task__path", "course_ids"]
+    raw_id_fields = ("owner",)
