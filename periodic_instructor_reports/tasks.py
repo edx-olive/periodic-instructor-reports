@@ -12,14 +12,16 @@ wrapper, we need to fake an HTTP request manually. To determine the user for
 """
 
 import hashlib
-from datetime import date
+from datetime import date, datetime
 from importlib import import_module
+import pytz
 from typing import Tuple, Callable
 
 from celery import shared_task
 from celery.utils.log import get_task_logger
 
 from django.contrib.auth.models import User
+from django.conf import settings
 from django.http.request import HttpRequest
 from opaque_keys.edx.locations import SlashSeparatedCourseKey
 
@@ -116,10 +118,15 @@ def periodic_task_wrapper(periodic_task_schedule_id: int) -> None:
                 )
             })
         elif schedule.upload_folder_structure == PeriodicReportSchedule.STRUCTURE_BY_DATE:
+            report_date = date.today()
+            if settings.FEATURES.get("PERIODIC_REPORTS_CUSTOM_TZ"):
+                timezone = pytz.timezone('Israel')
+                report_date = datetime.now(timezone).date()
+            directory_name = report_date.strftime("%Y/%m/%d")
             task_call_kwargs.update({
                 "upload_parent_dir": "{directory_prefix}{directory_name}".format(
                     directory_prefix=schedule.upload_folder_prefix,
-                    directory_name=date.today().strftime("%Y/%m/%d"),
+                    directory_name=directory_name,
                 )
             })
 

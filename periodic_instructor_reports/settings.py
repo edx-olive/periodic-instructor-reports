@@ -36,6 +36,8 @@ def plugin_settings(settings):
     if "django_celery_beat" not in settings.INSTALLED_APPS:
         settings.INSTALLED_APPS += ["django_celery_beat", ]
 
+    settings.FEATURES["PERIODIC_REPORTS_CUSTOM_TZ"] = True
+
     # Set the celery beat scheduler to database scheduler if not defined.
     # In case the scheduler is set to something else than `DatabaseScheduler`,
     # the plugin app may not work as expected or not schedule tasks at all.
