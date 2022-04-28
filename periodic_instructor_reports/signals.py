@@ -51,4 +51,6 @@ def delete_related_periodic_task(
     Delete the related celery task to not leave dangling references behind.
     """
 
+    instance._meta.auto_created = True
+    instance.celery_task._meta.auto_created = True
     instance.celery_task.delete()
