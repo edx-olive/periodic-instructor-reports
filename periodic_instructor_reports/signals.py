@@ -33,6 +33,7 @@ def create_or_update_related_periodic_task(
     celery_task.name = instance.task.name
     celery_task.task = "periodic_instructor_reports.tasks.periodic_task_wrapper"
     celery_task.interval = instance.interval
+    celery_task.crontab = instance.crontab
     celery_task.args = [instance.id]
     celery_task.save()
 

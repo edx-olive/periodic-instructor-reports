@@ -8,7 +8,7 @@ instructor reports from the Django admin UI.
 from django.db import models
 from django.contrib.auth.models import User
 from django.utils.translation import gettext_lazy as _
-from django_celery_beat.models import PeriodicTask, IntervalSchedule
+from django_celery_beat.models import PeriodicTask, IntervalSchedule, CrontabSchedule
 from jsonfield.fields import JSONField
 
 
@@ -73,7 +73,14 @@ class PeriodicReportSchedule(models.Model):
         editable=False,
         on_delete=models.CASCADE,
     )
-    interval = models.ForeignKey(IntervalSchedule, on_delete=models.CASCADE)
+    interval = models.ForeignKey(IntervalSchedule,
+                                on_delete=models.CASCADE, 
+                                null=True, 
+                                blank=True)
+    crontab = models.ForeignKey(CrontabSchedule,
+                                on_delete=models.CASCADE,
+                                null=True,
+                                blank=True)
     course_ids = JSONField(
         default=list(),
         help_text="List of course and CCX course IDs to run the reports against.",
